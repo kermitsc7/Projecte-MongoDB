@@ -1,7 +1,7 @@
 # Projecte-MongoDB
 
 ## Introducció
-Tenim una botiga de còmics i necessitem fer inventari per així facilitar el nostre treball dins de la botiga. A l'hora de guardar la informació de cada publicació també volem guardar quins artistes hi han participat, els personatges que surten a cada publicació i a quina col·lecció pertanyen, a més a més de l'editorial que els ha editat.\newline
+Tenim una botiga de còmics i necessitem fer inventari per així facilitar el nostre treball dins de la botiga. A l'hora de guardar la informació de cada publicació també volem guardar quins artistes hi han participat, els personatges que surten a cada publicació i a quina col·lecció pertanyen, a més a més de l'editorial que els ha editat.
 Per dur a terme aquesta tasca farem servir una base de dades no relacional documental, ja que als del departament tecnològic de la botiga ens sembla el més adequat i més s'adapta a les nostres necessitats. Un cop tinguem feta la base de dades voldrem comprovar que aquesta funciona correctament i ens permet buscar la informació que volem.
 
 ## Objectius
