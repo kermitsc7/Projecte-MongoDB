@@ -11,8 +11,18 @@ xl_file = pd.read_excel( 'Dades.xlsx', sheet_name=None)
 
 client = MongoClient('mongodb://dcccluster.uab.cat:8227/')
 
+#Eliminamos Base de Datos 
+client.drop_database(db_name)
+
 # Creamos Base de Datos
 db = client[db_name]
+
+# Miramos si la coleccion esta creada y si lo esta la eliminamos
+noms = ['Colleccions','Publicacions','Editorial','Artistes','Personatges']
+for col in noms:
+    if col in db.list_collection_names():
+        db[col].drop()
+    
 
 # Crear una colección por cada pestaña
 for sheet_name, df in xl_file.items():
@@ -26,9 +36,10 @@ for sheet_name, df in xl_file.items():
         
         dfC = df[['NomColleccio', 'total_exemplars','genere','idioma','any_inici','any_fi','tancada','NomEditorial']]
         dfC.genere = dfC.genere.apply(lambda x: x[1:-1].split(', '))
+        dfC=dfC.drop_duplicates(subset=["NomColleccio","NomEditorial"])
         dataC = dfC.to_dict('records')
         
-        dfP = df[['ISBN','titol','stock','autor','preu','num_pagines','guionistes','dibuixants','NomColleccio']]
+        dfP = df[['ISBN','titol','stock','autor','preu','num_pagines','guionistes','dibuixants','NomColleccio','NomEditorial']]
         dfP.guionistes = dfP.guionistes.apply(lambda x: x[1:-1].split(', '))
         dfP.dibuixants = dfP.dibuixants.apply(lambda x: x[1:-1].split(', '))
         dataP = dfP.to_dict('records')
