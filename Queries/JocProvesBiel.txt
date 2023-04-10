@@ -1,0 +1,25 @@
+//2.-Valor màxim, mínim i mitjà del preus de les publicacions de l’editorial Juniper Books
+db.Publicacions.aggregate([
+    {$match: {"NomEditorial":"Juniper Books"}},
+    {$group:{_id:"$NomEditorial","Max Price":{$max:"$preu"},"Min Price":{$min:"$preu"},"Avg Price":{$avg:"$preu"}}},
+])
+
+
+
+//5.-Per cada editorial, mostrar el recompte de col·leccions finalitzades i no finalitzades.
+db.Colleccions.aggregate([
+  {$group: {_id: {NomEditorial: "$NomEditorial",tancada: "$tancada"},count: {$sum: 1}}},
+  {$group: {_id: "$_id.NomEditorial",tancadaCounts: {$push: {tancada: "$_id.tancada",count: "$count"}}}}
+])
+
+
+// 8. Mostrar les publicacions amb tots els personatges de tipus “heroe”.
+db.Publicacions.aggregate([
+  {$lookup: {from: "Personatges",localField: "ISBN",foreignField: "isbn",as: "personatges"}},
+  {$match:{"personatges.tipus":"heroe"}},
+  {$group:{_id:"$ISBN",tipus:{$addToSet:"$personatges.tipus"}}},
+  {$unwind:"$tipus"},
+  {$project:{ _id:"$_id",totsHeroe:{$allElementsTrue:{$map:{input:"$tipus",as:"elem",in:{$eq:["$$elem","heroe"]}}}}}},
+  {$match:{totsHeroe:true}},
+  {$project:{'_id':1}}
+])
