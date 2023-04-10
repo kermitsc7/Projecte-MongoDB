@@ -1,0 +1,24 @@
+
+// 4. Numero de col·leccions per gènere. Mostra gènere i número total
+db.Colleccions.aggregate([
+    {$unwind:'$genere'},
+    {$sortByCount:'$genere'}
+])
+
+
+
+// 7. Mostrar el país d’origen de l’artista o artistes que han fet més guions.
+db.Publicacions.aggregate([
+    {$unwind:'$guionistes'},   
+    {$sortByCount:'$guionistes'},
+    {$lookup:{ from: "Artistes", localField: "_id", foreignField: "Nom_artistic", as: "match"}},
+    {$project:{"match.pais":1, '_id':0}},
+    {$limit:1}
+])
+
+
+// 10. Mostrar ISBN i títol de les publicacions conjuntament amb tota la seva informació dels personatges.
+db.Publicacions.aggregate([
+    {$lookup:{ from: "Personatges", localField: "ISBN", foreignField: "isbn", as: "personatges"}},
+    {$project:{"ISBN":1, "titol":1, "personatges":1, "_id":0}}
+])
