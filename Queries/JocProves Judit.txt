@@ -1,0 +1,2 @@
+// 1. Les 5 publicacions amb major preu. Mostrar només el títol i preu.
+db.Publicacions.find().sort({'preu':-1}).limit(5).projection({'titol':1,'preu':1,'_id':0})
